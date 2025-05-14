@@ -1,0 +1,74 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.toolbar {
+    background-color: #0047AB; /* Màu xanh dương giống hình ảnh */
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.toolbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+.toolbar li {
+    display: inline-block;
+}
+
+.toolbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+header {
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.service-row {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.service-item {
+    width: 200px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin: 10px;
+}
+
+.button-row {
+    margin: 20px 0;
+}
+
+.button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.image-container {
+    margin-top: 20px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}

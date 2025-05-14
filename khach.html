@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head lang="vnn">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
+<title>MebBookingBTL - Đặt lịch khám bệnh </title> <!--tieu de hien thi tren tab trinh duyet -->
+<meta name="description" content="Đặt lịch khám online nhanh chóng tại các bệnh viện gần bạn. Tích hợp Google Maps, cung cấp thông tin bệnh viện chi tiết: chuyên khoa, bác sĩ, giờ làm việc.">
+<meta name="keywords" content="bênh viện,đặt lịch ,tra cứu thông tin bệnh viện, bác sĩ , Bắc Từ Liêm">
+<!-- Favicon (icon nhỏ trên tab trình duyệt -->
+<link rel="icon" href="image/x-icon">
+<link rel="stylesheet" href="datlich1.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    .grid-container{
+        display :grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr ;
+        background-color: rgb(202, 224, 247) ;
+        padding: 10px;
+    gap: 10px;
+    }
+    .gird-container > div {
+      background-color: #f1f1f1;
+      color: #f6f1f1;
+      padding: 10px ;
+      font-size: 30px;
+      text-align: center;
+    }
+   
+</style>
+</head>
+<body>
+        <div class="booking-container">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <i class="fas fa-calendar-check booking-icon"></i>
+                    <h2 class="form-title">Đặt lịch khám bệnh</h2>
+                </div>
+                <form id="booking-form" class="booking-form">
+                    <div class="form-section">
+                        <h3 class="section-title">Thông tin cá nhân</h3>
+                        <div class="form-group">
+                            <label for="patient-name"><i class="fas fa-user"></i> Họ và tên:</label>
+                            <input type="text" id="patient-name" placeholder="Nhập họ và tên" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date-of-birth"><i class="fas fa-birthday-cake"></i> Ngày sinh:</label>
+                            <input type="date" id="date-of-birth" placeholder="mm/dd/yyyy">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-number"><i class="fas fa-phone"></i> Số điện thoại:</label>
+                            <input type="tel" id="phone-number" placeholder="Nhập số điện thoại" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                            <input type="email" id="email" placeholder="Nhập email">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender"><i class="fas fa-venus-mars"></i> Giới tính:</label>
+                            <select id="gender">
+                                <option value="">Chọn giới tính</option>
+                                <option value="male">Nam</option>
+                                <option value="female">Nữ</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+                    </div>
+    
+                    <div class="form-section">
+                        <h3 class="section-title">Thông tin địa chỉ và khám bệnh</h3>
+                        <div class="form-group">
+                            <label for="address"><i class="fas fa-home"></i> Địa chỉ:</label>
+                            <input type="text" id="address" placeholder="Nhập địa chỉ">
+                        </div>
+                         <div class="form-group">
+                        
+                            <label for="facility"><i class="fas fa-hospital"></i> Bệnh viện:</label>
+                            <select id="facility">
+                                <option value="">Chọn bệnh viện</option>
+                                <option value="phuongDong">Bệnh viện Phương Đông</option>
+                                <option value="5saoHaNoi">Bệnh viện 5 Sao Hà Nội</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="specialty"><i class="fas fa-stethoscope"></i> Chuyên khoa:</label>
+                            <select id="specialty">
+                                <option value="">Chọn chuyên khoa</option>
+                                </select>
+                        </div>
+                    </div>
+    
+                    <button type="submit" class="next-button">Tiếp theo</button>
+                </form>
+    
+                <div id="hospital-suggestion" class="hospital-suggestion-section">
+                    <h3 class="section-title"><i class="fas fa-hospital-symbol"></i> Bệnh viện gần nhất</h3>
+                    <div class="hospital-info">
+                        <p id="hospital-suggestion-text">Đang tìm bệnh viện gần bạn...</p>
+                        <a id="hospital-booking-link" href="#" target="_blank" rel="noopener noreferrer">Đặt lịch khám tại bệnh viện này</a>
+                    </div>
+                </div>
+    
+                <div id="specialty-section" class="specialty-info-section">
+                    <h3 class="section-title"><i class="fas fa-info-circle"></i> Thông tin chuyên khoa</h3>
+                    <div class="specialty-details">
+                        <p id="specialty-details-text">Vui lòng chọn chuyên khoa để xem thông tin chi tiết.</p>
+                        <p id="working-hours-section"><i class="far fa-clock"></i> <span id="working-hours-text"></span></p>
+                    </div>
+                </div>
+    
+                <div id="map-section" class="map-direction-section">
+                    <h3 class="section-title"><i class="fas fa-map-marked-alt"></i> Bản đồ đường đi</h3>
+                    <div class="map-container">
+                        <button id="google-map" class="map-button">Xem bản đồ trên Google Maps <i class="fas fa-map-signs"></i></button>
+                        <p id="notification-safe-trip" class="notification">Chúc quý khách có một chuyến đi an toàn!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <script src="datlich2.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    
+    </body>
+</html>

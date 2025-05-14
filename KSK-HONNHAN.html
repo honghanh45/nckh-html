@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MebBookingBTL - Đặt lịch khám bệnh</title>
+    <meta name="description" content="Đặt lịch khám online nhanh chóng tại các bệnh viện gần bạn. Tích hợp Google Maps, cung cấp thông tin bệnh viện chi tiết: chuyên khoa, bác sĩ, giờ làm việc.">
+    <meta name="keywords" content="bênh viện, đặt lịch, tra cứu thông tin bệnh viện, bác sĩ, Bắc Từ Liêm">
+    <link rel="icon" href="image/x-icon">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS cục bộ -->
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Font Awesome CSS để sử dụng biểu tượng kính lúp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="laixe.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" >
+    <img src="ksktienhonnhan.jpg" 
+    style ="width: 100%; height: auto; display: block;" >
+</head>
+<body>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Tuỳ chỉnh màu nền pastel */
+        .header-custom {
+            background-color: #cce5ff; /* Xanh dương pastel */
+        }
+        /* Định dạng cho kết quả tìm kiếm */
+        #searchResultsList {
+            display: none;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+    </style>
+
+    <!-- Header chính -->
+    <header class="header-custom text-dark p-3 border-bottom">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <!-- Phần tiêu đề -->
+            <div class="mb-2 mb-md-0">
+                <span class="brand-name fs-5 fw-bold d-block">MedBookingBTL</span>
+                <small>HỆ THỐNG ĐẶT LỊCH KHÁM BỆNH VIỆN</small>
+            </div>
+            <!-- Thanh tìm kiếm -->
+            <div class="search-container">
+                <form id="searchForm">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm..." />
+                    <button type="submit">
+                        <i class="fas fa-search"></i> <!-- Biểu tượng kính lúp từ Font Awesome -->
+                    </button>
+                </form>
+            </div>
+            <!-- Nút đăng ký / đăng nhập -->
+            <div class="user-actions">
+                <a href="DANGKI.html" class="btn btn-primary text-white me-2">Đăng ký</a>
+                <a href="DANGNHAP.html" class="btn btn-primary text-white">Đăng nhập</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Khu vực hiển thị gợi ý -->
+    <div id="searchResult"></div>
+
+    <!-- Nội dung chính -->
+    <div class="container mt-4">
+        <!-- Kết quả tìm kiếm -->
+        <div id="searchResultsList"></div>
+    <nav>
+        <ul class ="nav-links"><a href="index.html" target="_parent"> <b>TRANG CHỦ</b></a>
+        <div class="dropdown">
+        <span><a href="GIOITHIEU.html"><b> GIỚI THIỆU </b></a></span>
+        <div class="dropdown-content">
+                <ul class="dropdown">
+                    <li><a href="CHUYENKHOA.html"><b>CHUYÊN KHOA Y TẾ </b></a></li>
+                     <li><a href="CSVC.html"><b>CƠ SỞ VẬT CHẤT</b></a></li>
+                </ul>
+            </div>
+        </div>
+        </div>
+        <div class="dropdown">
+        <span><a href="DICHVUYTE.html" target="_self"><b> DỊCH VỤ Y TẾ </b></a></span>
+        <div class="dropdown-content">
+        <ul class="dropdown">
+        <li><a href="KHAMSUCKHOE.html"><b>GÓI KHÁM SỨC KHỎE </b></a></li>
+        <li><a href="THAISAN.html"><b>THAI SẢN VÀ PHỤ KHOA </b></a></li>
+        <li><a href="https://benhvienphuongdong.vn/trung-tam-tu-van-tiem-chung-vac-xin/"><b>TRUNG TÂM TƯ VẤN VÀ TIÊM CHỦNG VẮC XIN </b></a></li>
+        <li><a href="https://benhvienphuongdong.vn/dich-vu/goi-can-thiep-tre-cham-phat-trien-ngon-ngu/"><b>GÓI KHÁM PHỤC HỒI CHỨC NĂNG</b></a></li>
+        <li><a href="https://benhvienphuongdong.vn/trung-tam-cham-soc-suc-khoe-tinh-than/"><b>TRUNG TÂM CHĂM SÓC SỨC KHỎE TINH THẦN </b></a></li>
+        <li><a href="BENHNEN.html"><b>KHÁM BỆNH NỀN TẠI NHÀ </b></a></li>
+        </ul>
+        </div>
+        </div>
+        <div class="dropdown">
+        <span><a href="#"><b>HƯỚNG DẪN KHÁCH HÀNG</b></a></span>
+        <div class="dropdown-content">
+            <ul class="dropdown">
+                <li><a href="khach.html"> <b>ĐẶT LỊCH KHÁM GẦN BẠN</b> </a></li>
+                <li><a href="banggia.html"> <b>BẢNG GIÁ DỊCH VỤ CHUNG</b> </a></li>
+                <li><a href="TIME.html"> <b>GIỜ LÀM VIỆC</b> </a> </li>
+            </ul>
+        </div>
+        </div>
+        <a href="#"><b>LIÊN HỆ</b></a></ul>
+        </nav>
+        <div class="banner">
+            <h2>Khám Sức Khỏe Tiền Hôn Nhân - Cho Hạnh Phúc Bền Lâu</h2>
+            <p>Chuẩn bị tốt nhất cho cuộc sống hôn nhân hạnh phúc và khỏe mạnh cùng bệnh viện Phương Đông.</p>
+        </div>
+    <div class="container">
+        <section class="services">
+            <h2>CÁC DỊCH VỤ Y TẾ</h2>
+            <div class="service-item">
+                <h3>KHÁM SỨC KHỎE TIỀN HÔN NHÂN</h3>
+                <p>
+                    Khám sức khỏe tiền hôn nhân giúp các cặp đôi hiểu rõ về tình trạng sức khỏe của bản thân và đối phương,
+                    đảm bảo một cuộc sống hôn nhân hạnh phúc và khỏe mạnh.
+                    Gói khám bao gồm các xét nghiệm di truyền, kiểm tra sức khỏe sinh sản và tư vấn về kế hoạch hóa gia đình.
+                   
+                    Khám sức khỏe tiền hôn nhân giúp các cặp đôi hiểu rõ về tình trạng sức khỏe của bản thân và đối phương,
+                    đảm bảo một cuộc sống hôn nhân hạnh phúc và khỏe mạnh.
+                    Gói khám bao gồm các xét nghiệm di truyền, kiểm tra sức khỏe sinh sản và tư vấn về kế hoạch hóa gia đình.
+                    <br><br>
+                    <strong>Đối tượng và điều kiện áp dụng:</strong>
+                    <br>
+                    • Người trẻ cần chuẩn bị kết hôn (trước khi kết hôn từ 3-6 tháng nên đi khám tiền hôn nhân)
+                    <br>
+                    • Người vừa mới kết hôn chuẩn bị có kế hoạch sinh con
+                    
+                    <br><br>
+                    <strong>Vì sao nên chọn “Gói khám sức khỏe tiền hôn nhân” tại bệnh viện Phương Đông:</strong>
+                    <br>
+                    • Gói khám được xây dựng bởi các chuyên gia Y tế với các danh mục thiết kế khoa học.
+                    <br>
+                    • Có gói khám dành riêng cho nam và nữ. Chi phí hợp lý, phù hợp với nhiều khách hàng.
+                    <br>
+                    • Hệ thống máy móc, trang thiết bị tiên tiến, đảm bảo cho kết quả chính xác, phát hiện những mầm mống bệnh dù nhỏ nhất.
+                    <br>
+                    • Thăm khám cùng đội ngũ bác sĩ sản phụ khoa/nam khoa chuyên môn cao.
+                    <br>
+                    • Quy trình thăm khám nhanh chóng, có thể đặt lịch qua hotline hoặc fanpage.
+                    <br>
+                    • Bảo mật tuyệt đối kết quả khám cũng như thông tin khách hàng.
+                    <br>
+                    • Trải qua nhiều năm hoạt động, bệnh viện Phương Đông đã khám và điều trị thành công cho nhiều cặp đôi khi phát hiện có sự bất thường về sức khỏe, giúp gìn giữ hạnh phúc của hàng nghìn gia đình.
+                </p>
+                <div class="hospital-container">
+                    <p>Bấm vào "click" để biết thêm chi tiết nhé!</p>
+                    <a href="https://benhvienphuongdong.vn/dich-vu/kham-suc-khoe-tien-hon-nhan-khoi-dau-cho-hanh-phuc/"><b>Click</b></a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

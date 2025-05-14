@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Khách Hàng</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        nav { background: #2c3e50; padding: 10px; }
+        nav a { color: white; text-decoration: none; padding: 10px; display: inline-block; }
+        section { display: none; padding: 20px; }
+        .active { display: block; }
+        button { display: block; width: 100%; padding: 10px; margin: 10px 0; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="showSection('huongdan')">Hướng Dẫn Khách Hàng</a>
+    </nav>
+    
+    <div class="container">
+        <section id="huongdan" class="active">
+            <h2>Hướng Dẫn Khách Hàng</h2>
+            <button onclick="datLich()">Đặt lịch khám bệnh tại cơ sở</button>
+            <button onclick="datLichGan()">Đặt lịch gần bạn</button>
+            <button onclick="traCuuKetQua()">Tra cứu kết quả</button>
+            <button onclick="bangGia()">Bảng giá dịch vụ chung</button>
+            <button onclick="tuVanOnline()">Tư vấn online</button>
+            <button onclick="gioLamViec()">Giờ làm việc</button>
+            <button onclick="quyTrinh()">Quy trình khám chữa bệnh</button>
+        </section>
+    </div>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+        }
+        function datLich() {
+            alert("Chức năng đặt lịch khám tại cơ sở đang được phát triển.");
+        }
+        function datLichGan() {
+            alert("Chức năng đặt lịch gần bạn đang được phát triển.");
+        }
+        function traCuuKetQua() {
+            alert("Vui lòng nhập mã hồ sơ để tra cứu kết quả.");
+        }
+        function bangGia() {
+            alert("Bảng giá dịch vụ chung hiện có trên website chính thức.");
+        }
+        function tuVanOnline() {
+            alert("Vui lòng liên hệ tư vấn viên để được hỗ trợ online.");
+        }
+        function gioLamViec() {
+            alert("Giờ làm việc: 8h - 17h từ Thứ 2 đến Thứ 7.");
+        }
+        function quyTrinh() {
+            alert("Quy trình khám chữa bệnh: Đăng ký -> Khám -> Xét nghiệm -> Điều trị.");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #0c0909;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: #5e8ec2;
+    color: #e9e7e7;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    background: #0056b3;
+    padding: 10px;
+}
+
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 12px 50px;
+    font-size: 18px;
+    flex :1;
+    text-align: center;
+}
+
+nav a:hover {
+    background: #003d82;
+    border-radius: 10px;
+}
+
+/* Container */
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Section */
+.section {
+    margin-bottom: 35px;
+}
+
+.section h2 {
+    color: #04090e;
+    margin-bottom: 10px;
+}
+
+/* Button */
+.btn {
+    display: inline-block;
+    background: #428ad7;
+    color: rgb(30, 23, 23);
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    margin-top: 20px;
+}
+/* Định dạng dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Nội dung dropdown */
+.dropdown-content {
+    display: none; /* Ẩn mặc định */
+    position: absolute;
+    background-color: #0b3b72;
+    min-width: 250px; /* Tăng chiều rộng để chữ không bị xuống dòng */
+    padding: 10px 0;
+    z-index: 999;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Hiển thị dropdown khi hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Định dạng các mục trong dropdown */
+.dropdown-content a {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+/* Hover vào mục dropdown */
+.dropdown-content a:hover {
+    background: #0056b3;
+    border-radius: 5px;
+}
+
+/* Căn chỉnh chữ trong dropdown */
+.dropdown-content {
+    text-align: left;
+    white-space: nowrap; /* Giữ nội dung trên một dòng */
+}

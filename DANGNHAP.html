@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập -MedBookingBTL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Global Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+    color: #202124;
+    margin: 0;
+    padding: 0;
+}
+
+/* Form Container */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #fff;
+}
+
+.card-header {
+    background-color: #1a73e8;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 12px 12px 0 0;
+}
+
+/* Form Fields */
+.form-control {
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #dadce0;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.form-control:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #1a73e8;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #1365d1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(26, 115, 232, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <main class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-info text-white">
+                            <h3 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="loginAlertContainer" style="display: none;"></div>
+
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <label for="loginUsername"><i class="fas fa-user-circle me-1"></i>Tên đăng nhập</label>
+                                    <input type="text" class="form-control" id="loginUsername" required>
+                                    <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="loginPassword"><i class="fas fa-lock me-1"></i>Mật khẩu</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                    <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            const DB_NAME = 'HospitalDB';
+            const DB_VERSION = 1;
+            const STORE_NAME = 'patients';
+
+            let db;
+            const openDB = () => {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                    request.onupgradeneeded = (event) => {
+                        db = event.target.result;
+                        if (!db.objectStoreNames.contains(STORE_NAME)) {
+                            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        }
+                    };
+
+                    request.onsuccess = (event) => {
+                        db = event.target.result;
+                        resolve(db);
+                    };
+
+                    request.onerror = (event) => {
+                        reject(`Lỗi khi mở cơ sở dữ liệu: ${event.target.error}`);
+                    };
+                });
+            };
+
+            const getPatients = () => {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction(STORE_NAME, 'readonly');
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.getAll();
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = (event) => reject(`Lỗi khi lấy danh sách bệnh nhân: ${event.target.error}`);
+                });
+            };
+
+            $('#loginForm').on('submit', async function (e) {
+    e.preventDefault();
+
+    const submitButton = $(this).find('button[type="submit"]');
+    submitButton.prop('disabled', true);
+
+    try {
+        const username = $('#loginUsername').val().trim();
+        const password = $('#loginPassword').val().trim();
+        if (!username || !password) {
+            throw new Error('Vui lòng nhập đầy đủ thông tin đăng nhập.');
+        }
+
+        await openDB();
+
+        const patients = await getPatients();
+
+        const patient = patients.find(p => p.username === username && p.password === password);
+
+        if (!patient) {
+            throw new Error('Tên đăng nhập hoặc mật khẩu không chính xác.');
+        }
+
+        $('#loginAlertContainer').html(`
+            <div class="alert alert-success">
+                Đăng nhập thành công!<br>
+                Xin chào, ${patient.fullName}!
+            </div>
+        `).slideDown();
+
+        setTimeout(() => {
+            window.location.href = 'changchu.html';
+        }, 2000);
+        $('#loginForm')[0].reset();
+    } catch (error) {
+   
+        $('#loginAlertContainer').html(`
+            <div class="alert alert-danger">
+                ${error.message}
+            </div>
+        `).slideDown();
+    } finally {
+    
+        submitButton.prop('disabled', false);
+        setTimeout(() => $('#loginAlertContainer').slideUp(), 5000);
+    }
+});
+        });
+    </script>
+</body>
+</html>

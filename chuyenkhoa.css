@@ -1,0 +1,115 @@
+
+.tree {
+    flex-grow: 1;
+    overflow-y: auto;
+    text-align: center;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.tree ul {
+    list-style: none;
+    padding: 0;
+    position: relative;
+    padding-top: 30px;
+    display: inline-block;
+}
+
+.tree li {
+    position: relative;
+    display: inline-block;
+    margin: 0 15px;
+    vertical-align: top;
+}
+
+/* Đường nối */
+.tree ul li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid #3498db;
+    width: 0;
+    height: 30px;
+}
+
+.tree ul ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-top: 2px solid #3498db;
+    width: 50%;
+    height: 0;
+}
+
+/* Node styling */
+.tree span, .tree a {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #f0f8ff;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 150px;
+    text-align: center;
+}
+
+/* Hover effect */
+.tree span:hover, .tree a:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Root node */
+.tree > ul > li::before {
+    border: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .tree li {
+        margin: 5px 10px;
+    }
+    
+    .tree span, .tree a {
+        padding: 8px 10px;
+        min-width: 120px;
+        font-size: 14px;
+    }
+}
+
+/* Level-specific styling */
+.tree > ul > li > span {  /* Root level */
+    background: #2ecc71;
+    color: white;
+    border-color: #27ae60;
+}
+
+.tree > ul > li > ul > li > span {  /* Second level */
+    background: #e67e22;
+    color: white;
+    border-color: #d35400;
+}
+
+/* Animation */
+.tree li {
+    animation: fadeIn 0.5s ease-in forwards;
+    margin: 5px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head lang="vnn">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
+<title>MebBookingBTL - Đặt lịch khám bệnh </title> <!--tieu de hien thi tren tab trinh duyet -->
+<meta name="description" content="Đặt lịch khám online nhanh chóng tại các bệnh viện gần bạn. Tích hợp Google Maps, cung cấp thông tin bệnh viện chi tiết: chuyên khoa, bác sĩ, giờ làm việc.">
+<meta name="keywords" content="bênh viện,đặt lịch ,tra cứu thông tin bệnh viện, bác sĩ , Bắc Từ Liêm">
+<!-- Favicon (icon nhỏ trên tab trình duyệt -->
+<link rel="icon" href="image/x-icon">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS cục bộ -->
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Font Awesome CSS để sử dụng biểu tượng kính lúp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="main.css">
+<img src="khamsuckhoe.jpg"
+style ="width: 100%; height: auto; display: block;" >
+
+</head>
+<body>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <style>
+            /* Tuỳ chỉnh màu nền pastel */
+            .header-custom {
+                background-color: #cce5ff; /* Xanh dương pastel */
+            }
+            /* Định dạng cho kết quả tìm kiếm */
+            #searchResultsList {
+                display: none;
+                margin-bottom: 20px;
+                padding: 15px;
+                background-color: #f8f9fa;
+                border-radius: 5px;
+            }
+        </style>
+    
+        <!-- Header chính -->
+        <header class="header-custom text-dark p-3 border-bottom">
+            <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <!-- Phần tiêu đề -->
+                <div class="mb-2 mb-md-0">
+                    <span class="brand-name fs-5 fw-bold d-block">MedBookingBTL</span>
+                    <small>HỆ THỐNG ĐẶT LỊCH KHÁM BỆNH VIỆN</small>
+                </div>
+                <!-- Thanh tìm kiếm -->
+                <div class="search-container">
+                    <form id="searchForm">
+                        <input type="text" id="searchInput" placeholder="Tìm kiếm..." />
+                        <button type="submit">
+                            <i class="fas fa-search"></i> <!-- Biểu tượng kính lúp từ Font Awesome -->
+                        </button>
+                    </form>
+                </div>
+                <!-- Nút đăng ký / đăng nhập -->
+                <div class="user-actions">
+                    <a href="DANGKI.html" class="btn btn-primary text-white me-2">Đăng ký</a>
+                    <a href="DANGNHAP.html" class="btn btn-primary text-white">Đăng nhập</a>
+                </div>
+            </div>
+        </header>
+    
+        <!-- Khu vực hiển thị gợi ý -->
+        <div id="searchResult"></div>
+    
+        <!-- Nội dung chính -->
+        <div class="container mt-4">
+            <!-- Kết quả tìm kiếm -->
+            <div id="searchResultsList"></div>
+<!-- Navigation -->
+<section>
+    <nav>
+        <ul class="nav-links"><a href="index.html" target="_parent"  data-keywords="home trang chính"> <b>TRANG CHỦ</b></a>
+            <div class="dropdown">
+                <span><a href="GIOITHIEU.html" data-keywords="introduce about"><b> GIỚI THIỆU </b></a></span>
+                <div class="dropdown-content">
+                    <ul class="dropdown">
+                        <li><a href="CHUYENKHOA.html" data-keywords="medical specialty"><b>CHUYÊN KHOA Y TẾ </b></a></li>
+                        <li><a href="CSVC.html" data-keywords="facilities infrastructure"><b>CƠ SỞ VẬT CHẤT </b></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span><a href="DICHVUYTE.html" target="_self" data-keywords="medical service healthcare"><b> DỊCH VỤ Y TẾ </b></a></span>
+                <div class="dropdown-content">
+                    <ul class="dropdown">
+                        <li><a href="KHAMSUCKHOE.html" data-keywords="health checkup package"><b>GÓI KHÁM SỨC KHỎE </b></a></li>
+                        <li><a href="THAISAN.html" data-keywords="maternity obstetrics gynecology"><b>THAI SẢN VÀ PHỤ KHOA </b></a></li>
+                        <li><a href="https://benhvienphuongdong.vn/trung-tam-tu-van-tiem-chung-vac-xin/" data-keywords="vaccination center"><b>TRUNG TÂM TƯ
+                                    VẤN VÀ TIÊM CHỦNG VẮC XIN </b></a></li>
+                        <li><a href="https://benhvienphuongdong.vn/dich-vu/goi-can-thiep-tre-cham-phat-trien-ngon-ngu/" data-keywords="rehabilitation therapy"><b>GÓI
+                                    KHÁM PHỤC HỒI CHỨC NĂNG </b></a></li>
+                        <li><a href="https://benhvienphuongdong.vn/trung-tam-cham-soc-suc-khoe-tinh-than/" data-keywords="mental health care"><b>TRUNG TÂM
+                                    CHĂM SÓC SỨC KHỎE TINH THẦN</b></a></li>
+                        <li><a href="BENHNEN.html" data-keywords="chronic disease home care"><b>KHÁM BỆNH NỀN TẠI NHÀ </b></a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="dropdown">
+                <span><a href="#" data-keywords="customer guide help"><b>HƯỚNG DẪN KHÁCH HÀNG</b></a></span>
+                <div class="dropdown-content">
+                    <ul class="dropdown">
+                        <li><a href="changchu.html" data-keywords="book appointment near you schedule"> <b>ĐẶT LỊCH KHÁM GẦN BẠN</b> </a></li>
+                        <li><a href="banggia.html" data-keywords="price list service fee"> <b>BẢNG GIÁ DỊCH VỤ CHUNG</b> </a></li>
+                        <li><a href="TIME.html" data-keywords="working hours schedule"> <b>GIỜ LÀM VIỆC</b> </a> </li>
+                    </ul>
+                </div>
+            </div>
+            <a href="#"  data-keywords="contact support"><b>LIÊN HỆ</b></a>
+</section>
+<!--main container-->
+ <div class="container">
+ <section class="section">
+        <h2> GÓI KHÁM SỨC KHỎE </h2>
+        <p>
+        <li>
+            <a href="KSK-DN.html"><b>KHÁM SỨC KHỎE DOANH NGHIỆP </b></a>
+        </li>
+        <li><a href="KSK-CANHAN.html"><b>KHÁM SỨC KHỎE CÁ NHÂN </b></a></li>
+        <li><a href="KSK-LAIXE.html"><b>kHÁM SỨC KHỎE LÁI XE </b></a></li>
+        <li><a href="KSK-XINVIEC.html"><b>KHÁM SỨC KHỎE XIN VIỆC </b></a></li>
+        <li><a href="KSK-HONNHAN.html"><b>KHÁM SỨC KHỎE TIỀN HÔN NHÂN </b></a></li>
+        <li><a href="KSK-VIETNGOAI.html"><b>KHÁM SỨC KHỎE CHO NGUỜI VIỆT ĐI NƯỚC NGOÀI </b></a></li>
+        <li><a href="KSK-CAOTUOI.html"><b>KHÁM SỨC KHỎE CHO NGƯỜI CAO TUỔI </b></a></li>
+        </p>
+        </section>
+         </div>
+</body>
+</html>

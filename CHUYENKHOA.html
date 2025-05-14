@@ -1,0 +1,213 @@
+  <!DOCTYPE html>
+<html lang="vn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
+    <title>MebBookingBTL - Đặt lịch khám bệnh</title>
+    <meta name="description"
+        content="Đặt lịch khám online nhanh chóng tại các bệnh viện gần bạn. Tích hợp Google Maps, cung cấp thông tin bệnh viện chi tiết: chuyên khoa, bác sĩ, giờ làm việc.">
+    <meta name="keywords" content="bênh viện,đặt lịch ,tra cứu thông tin bệnh viện, bác sĩ , Bắc Từ Liêm">
+    <link rel="icon" href="image/x-icon">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS cục bộ -->
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Font Awesome CSS để sử dụng biểu tượng kính lúp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="main.css"> 
+    <img
+    src="chuyenkhoa.jpg"
+    style="width: 100%; height: auto; display: block;">
+</head>
+
+<body>
+      <!-- Bootstrap CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+      <style>
+          /* Tuỳ chỉnh màu nền pastel */
+          .header-custom {
+              background-color: #cce5ff; /* Xanh dương pastel */
+          }
+          /* Định dạng cho kết quả tìm kiếm */
+          #searchResultsList {
+              display: none;
+              margin-bottom: 20px;
+              padding: 15px;
+              background-color: #f8f9fa;
+              border-radius: 5px;
+          }
+      </style>
+  
+      <!-- Header chính -->
+      <header class="header-custom text-dark p-3 border-bottom">
+          <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+              <!-- Phần tiêu đề -->
+              <div class="mb-2 mb-md-0">
+                  <span class="brand-name fs-5 fw-bold d-block">MedBookingBTL</span>
+                  <small>HỆ THỐNG ĐẶT LỊCH KHÁM BỆNH VIỆN</small>
+              </div>
+              <!-- Thanh tìm kiếm -->
+              <div class="search-container">
+                  <form id="searchForm">
+                      <input type="text" id="searchInput" placeholder="Tìm kiếm..." />
+                      <button type="submit">
+                          <i class="fas fa-search"></i> <!-- Biểu tượng kính lúp từ Font Awesome -->
+                      </button>
+                  </form>
+              </div>
+              <!-- Nút đăng ký / đăng nhập -->
+              <div class="user-actions">
+                  <a href="DANGKI.html" class="btn btn-primary text-white me-2">Đăng ký</a>
+                  <a href="DANGNHAP.html" class="btn btn-primary text-white">Đăng nhập</a>
+              </div>
+          </div>
+      </header>
+  
+      <!-- Khu vực hiển thị gợi ý -->
+      <div id="searchResult"></div>
+  
+      <!-- Nội dung chính -->
+      <div class="container mt-4">
+          <!-- Kết quả tìm kiếm -->
+          <div id="searchResultsList"></div>
+    <!-- Navigation -->
+  <nav>
+    <ul class="nav-links"><a href="index.html" target="_parent"> <b>TRANG CHỦ</b></a>
+      <div class="dropdown">
+        <span><a href="GIOITHIEU.html"><b> GIỚI THIỆU </b></a></span>
+        <div class="dropdown-content">
+          <ul class="dropdown">
+            <li><a href="CHUYENKHOA.html"><b>CHUYÊN KHOA Y TẾ </b></a></li>
+            <li><a href="CSVC.html"><b>CƠ SỞ VẬT CHẤT </b></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="dropdown">
+        <span><a href="DICHVUYTE.html" target="_self"><b> DỊCH VỤ Y TẾ </b></a></span>
+        <div class="dropdown-content">
+            <ul class="dropdown">
+                <li><a href="KHAMSUCKHOE.html"><b>GÓI KHÁM SỨC KHỎE </b></a></li>
+                <li><a href="THAISAN.html"><b>THAI SẢN VÀ PHỤ KHOA </b></a></li>
+                <li><a href="https://benhvienphuongdong.vn/trung-tam-tu-van-tiem-chung-vac-xin/"><b>TRUNG TÂM TƯ VẤN VÀ TIÊM CHỦNG VẮC XIN </b></a></li>
+                <li><a href="https://benhvienphuongdong.vn/dich-vu/goi-can-thiep-tre-cham-phat-trien-ngon-ngu/"><b>GÓI KHÁM PHỤC HỒI CHỨC NĂNG</b></a></li>
+                <li><a href="https://benhvienphuongdong.vn/trung-tam-cham-soc-suc-khoe-tinh-than/"><b>TRUNG TÂM CHĂM SÓC SỨC KHỎE TINH THẦN </b></a></li>
+             <li><a href="BENHNEN.html"><b>KHÁM BỆNH NỀN TẠI NHÀ </b></a></li>
+            </ul>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <span><a href="#"><b>HƯỚNG DẪN KHÁCH HÀNG</b></a></span>
+        <div class="dropdown-content">
+          <ul class="dropdown">
+              <li><a href="khach.html"> <b>ĐẶT LỊCH KHÁM GẦN BẠN</b> </a></li>
+              <li><a href="banggia.html"> <b>BẢNG GIÁ DỊCH VỤ CHUNG</b> </a></li>
+              <li><a href="TIME.html"> <b>GIỜ LÀM VIỆC</b> </a> </li>
+
+
+          </ul>
+      </div>
+      </div>
+      <a href="#"><b>LIÊN HỆ</b></a>
+    </ul>
+
+  </nav>
+    <main class="container">
+        <section >
+            <h2>CHUYÊN KHOA Y TẾ</h2>
+            <p>
+              <div class="tree">
+                <ul>
+                    <li>
+                        <span>Bệnh viện đa khoa Phương Đông</span>
+                        <ul>
+                            <li>
+                              <span>Khoa Ngoại</span>
+                              <ul>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-rang-ham-mat/"><b>Khoa Răng - Hàm - Mặt</b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-tai-mui-hong/"><b>Khoa Tai - Mũi - Họng </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-mat/"><b>Khoa Mắt </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-chan-thuong-chinh-hinh/"><b>Khoa chấn thương chỉnh hình </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-phau-thuat-o-bung/"><b>Khoa phẫu thuật ổ bụng </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-phau-thuat-than-kinh/"><b>Khoa phẫu thuật thần kinh </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-phau-thuat-tiet-nieu/"><b>Khoa phẫu thuật tiết niệu </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-nam-hoc/"><b>Khoa nam học  </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/trung-tam-co-xuong-khop/"><b>Trung tâm Cơ xương khớp </b></a></li>
+
+                              </ul>
+                            </li>
+                            <li>
+                              <span>Khoa Nội</span>
+                              <ul>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-tim-mach-va-mach-can-thiep/"><b>Khoa tim mạch & mạch can thiệp </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-tieu-hoa-va-gan-mat/"><b>Khoa tiêu hóa & gan mật </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-ho-hap-di-ung/"><b>Khoa hô hấp & dị ứng </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-benh-truyen-nhiem-va-y-hoc-nhiet-doi/"><b>Khoa bệnh truyền nhiễm & y học nhiệt đới </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-noi-tiet/"><b>Khoa nội tiết </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-noi-than-kinh/"><b>Khoa nội thần kinh </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-noi-than/"><b>Khoa nội thận </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-gay-me-hoi-suc/"><b>Khoa gây mê hồi sức </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/dich-vu-cap-cuu/"><b>Dịch vụ cấp cứu  </b></a></li>
+                              </ul>
+                            </li>
+                            <li>
+                              <span>Chuyên khoa Bổ trợ</span>
+                              <ul>
+                                <li><a href="https://benhvienphuongdong.vn/khoa-chan-doan-hinh-anh/"><b>Khoa chuẩn đoán hình ảnh </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-vat-ly-tri-lieu-phuc-hoi-chuc-nang/"><b>Khoa vật lý trị liệu & phục hồi chức năng </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/khoa-xet-nghiem-va-ngan-hang-mau/"><b>Khoa xét nghiệm & ngân hàng máu </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/khoa-duoc/"><b>Khoa dược </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-dinh-duong/"><b>Khoa dinh dưỡng </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/trung-tam-te-bao-goc/"><b>Khoa tế bào gôc - ngân hàng mô </b></a></li>
+                                <li><a href="https://benhvienphuongdong.vn/chuyen-khoa-y-hoc-co-truyen/"><b>Khoa y học cổ truyền </b></a></li>
+                              </ul>
+                            </li>
+                            <li><a href="https://benhvienphuongdong.vn/khoa-nhi/"><b>Khoa Nhi</b></a></li>
+                            <li><a href="https://benhvienphuongdong.vn/khoa-phu-san/"><b>Khoa Phụ Sản</b></a></li>
+                            <li><a href="https://benhvienphuongdong.vn/khoa-ung-buou/"><b>Khoa Ung Bướu</b></a></li>
+                            
+                        </ul>
+                    </li>
+                    <li>
+                        <span>Phòng khám đa khoa 5 sao Hà Nội</span>
+                        <ul>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-rang-ham-mat/"><b>Khoa Răng - Hàm - Mặt</b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-da-lieu-5-sao/"><b>Khoa Da Liễu </b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-mat/"><b>Khoa mắt </b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-ngoai-tong-hop/"><b>Khoa ngoại </b></a></li></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-nhi/"><b>Khoa Nhi </b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-san-phu-khoa/"><b>Khoa sản phụ khoa </b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-tam-than/"><b>Khoa tâm thần </b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-tai-mui-hong/"><b>Khoa Tai - Mũi - Họng </b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-noi/"><b>Khoa nội tổng hợp </b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-sieu-am/"><b>Khoa siêu âm </b></a></li>
+                            <li><a href="https://phongkham5sao.vn/chuyen-khoa-y-te/khoa-xquang-5-sao/"><b>Khoa X-Quang </b></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            </p>
+      </section>
+        <section class="section">
+            <h2>So sánh chuyên khoa</h2>
+            <p>
+                <strong>Chuyên khoa chung:</strong> Khoa nội, Khoa ngoại, Khoa nhi, Khoa sản , Khoa Răng-Hàm-Mặt, Khoa
+                Tai-Mũi-Họng, Khoa Mắt
+            </p>
+            <p>
+                <strong>Chuyên khoa riêng của Bệnh viện đa khoa Phương Đông :</strong> Khoa chuẩn đoán hình ảnh, Khoa xét
+                nghiệm, Khoa phục hồi chức năng
+            </p>
+            <p>
+                <strong>Chuyên khoa riêng của phòng khám đa khoa 5 sao Hà Nội :</strong> Khoa Da Liễu, Khoa thần kinh,
+                Khoa X-Quang
+            </p>
+        </section>
+
+    </main>
+</body>
+
+</html>

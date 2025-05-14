@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedBookingBTL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Ảnh nền -->
+    <header class="relative w-full h-64 bg-cover bg-center" style="background-image: url('https://benhvienphuongdong.vn/public/uploads/thu-vien-anh/khong-gian-benh-vien/phong-vip/phong-vip-3.jpg');">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <h1 class="text-white text-3xl font-bold">Chào mừng đến với MedBookingBTL</h1>
+        </div>
+    </header>
+
+    <!-- Dịch vụ chính -->
+    <section class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6 py-8 px-4">
+        <button id="btn-booking" class="bg-white p-6 rounded-lg shadow-md text-center">
+            <h3 class="text-xl font-bold">Đặt lịch khám</h3>
+            <p class="mt-2 text-gray-600">Hẹn gặp bác sĩ nhanh chóng chỉ với vài cú nhấp chuột.</p>
+        </button>
+        <button id="btn-search" class="bg-white p-6 rounded-lg shadow-md text-center">
+            <h3 class="text-xl font-bold">Tra cứu bệnh viện</h3>
+            <p class="mt-2 text-gray-600">Tìm kiếm thông tin bệnh viện, phòng khám gần bạn.</p>
+        </button>
+    </section>
+
+    <!-- Đặt lịch khám -->
+    <section id="appointment-section" class="max-w-5xl mx-auto py-8 px-4 hidden">
+        <h2 class="text-2xl font-semibold">Đặt lịch khám</h2>
+        <form id="appointment-form" class="mt-4">
+            <input type="text" id="name" placeholder="Họ và tên" class="w-full p-2 border rounded mt-2" required>
+            <input type="email" id="email" placeholder="Email" class="w-full p-2 border rounded mt-2" required>
+            <input type="text" id="phone" placeholder="Số điện thoại" class="w-full p-2 border rounded mt-2" required>
+            <select id="doctor-select" class="w-full p-2 border rounded mt-2" required>
+                    <input type="date" id="date" class="w-full p-2 border rounded mt-2" required>
+            <input type="time" id="time" class="w-full p-2 border rounded mt-2" required>
+            <textarea id="reason" placeholder="Lý do thăm khám" class="w-full p-2 border rounded mt-2" required></textarea>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded mt-4">Đặt lịch</button>
+        </form>
+        <p id="confirmation" class="mt-2 text-green-600 hidden">✅ Lịch khám đã được đặt!</p>
+    </section>
+
+    <!-- Tìm kiếm bệnh viện -->
+    <section id="hospital-search-section" class="max-w-5xl mx-auto py-8 px-4 hidden">
+        <h2 class="text-2xl font-semibold">Tìm kiếm bệnh viện</h2>
+        <input id="search" type="text" placeholder="Nhập tên bệnh viện..." class="w-full p-2 border rounded mt-4">
+<ul id="hospital-list" class="mt-4"></ul>
+    </section>
+
+    <script>
+        document.getElementById("btn-booking").addEventListener("click", () => {
+            document.getElementById("appointment-section").classList.toggle("hidden");
+        });
+
+        document.getElementById("btn-search").addEventListener("click", () => {
+            document.getElementById("hospital-search-section").classList.toggle("hidden");
+        });
+
+        document.getElementById("appointment-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            document.getElementById("confirmation").classList.remove("hidden");
+            setTimeout(() => {
+                document.getElementById("confirmation").classList.add("hidden");
+                this.reset();
+                document.getElementById("appointment-section").classList.add("hidden");
+            }, 3000);
+        });
+
+        const hospitals = [
+           "Bệnh viện E 87-89 Trần Cung, Nghĩa Tân, Cầu Giấy, Hà Nội",
+            "Bệnh viện Nam Thăng Long 38 Tân Xuân, Xuân Đỉnh, Bắc Từ Liêm, Hà Nội",
+            "Bệnh viện Phương Đông 9 Phố Viên, Cổ Nhuế, Bắc Từ Liêm, Hà Nội",
+            
+        ];
+
+        document.getElementById("search").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                const query = this.value.trim().toLowerCase();
+                const results = hospitals.filter(h => h.toLowerCase().includes(query));
+                const hospitalList = document.getElementById("hospital-list");
+                hospitalList.innerHTML = results.length ? results.map(h => `<li>${h}</li>`).join("") : "❌ Tên bệnh viện không tồn tại!";
+            }
+        });
+    </script>
+</body>
+</html>
