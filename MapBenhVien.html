@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản đồ tìm kiếm địa chỉ Việt Nam</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .container{max-width:1100px;margin:0auto;padding:1rem1.5rem;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#2c3e50}
+.flex{display:flex;flex-direction:column;gap:1rem}
+@media(min-width:1024px){.flex{flex-direction:row}}
+.lg\:w-1\/2{width:100%}
+@media(min-width:1024px){.lg\:w-1\/2{width:50%}}
+.space-y-4>*+*{margin-top:1rem}
+#address-input{width:100%;padding:14px45px14px16px;font-size:16px;border:1.5pxsolid#bbb;border-radius:10px;box-sizing:border-box}
+#address-input:focus{outline:none;border-color:#3498db;box-shadow:0 0 6px rgba(52,152,219,0.3)}
+#address-suggestions{position:absolute;top:100%;left:0;right:0;z-index:1000;background-color:#fff;border:1pxsolid#e0e0e0;border-radius:10px;box-shadow:0 8px24px rgba(0,0,0,0.1);max-height:300px;overflow-y:auto;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+#address-suggestions div{padding:12px16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+#address-suggestions div:hover{background-color:#f1f5f9;font-weight:bold}
+#address-suggestions div::before{content:"📍";font-size:18px;color:#888}
+#clear-input{position:absolute;right:14px;top:50%;transform:translateY(-50%);background-color:#e74c3c;border:none;color:white;font-weight:bold;padding:6px12px;border-radius:8px;cursor:pointer;box-shadow:0 2px6px rgba(231,76,60,0.4)}
+#clear-input:hover{background-color:#c0392b}
+#clear-input.hidden{display:none}
+.flex.space-x-2{display:flex;gap:0.5rem;flex-wrap:wrap}
+.flex.space-x-2>button,.flex.space-x-2>select{flex:1;min-width:130px;font-size:15px;padding:10px0;border-radius:10px;border:1.5pxsolid#bbb;background-color:#f9f9f9;color:#34495e;cursor:pointer}
+#hospital-selector{padding-left:14px;font-weight:600;background-color:white}
+#hospital-selector:focus{outline:none;border-color:#3498db;box-shadow:0 0 6px rgba(52,152,219,0.3)}
+#loading,#status{font-size:14px;color:#7f8c8d;font-style:italic;margin-top:0.5rem}
+#map{height:600px;width:100%;border-radius:14px;border:1.5pxsolid#ccc;box-shadow:0 3px8px rgba(0,0,0,0.07);background-color:#f5f7fa}
+@media(max-width:640px){#map{height:420px}}
+#open-google-maps-route,#zoom-to-hospital{flex:1;min-width:130px;font-size:15px;padding:10px0;border-radius:10px;border:1.5pxsolid#bbb;background-color:#3498db;color:white;cursor:pointer}
+#open-google-maps-route:hover,#zoom-to-hospital:hover{background-color:#2980b9}
+.spinner{border:4pxsolid rgba(0,0,0,0.1);border-left-color:#3498db;border-radius:50%;width:24px;height:24px;animation:spin1slinear infinite;display:inline-block;vertical-align:middle;margin-left:8px}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+#hospital-distances{bottom:0;left:0;right:0;background-color:rgba(255,255,255,0.95);border-top:1pxsolid#dcdcdc;padding:1rem;z-index:1000;box-shadow:0 -2px10px rgba(0,0,0,0.1)}
+#hospital-distances .hospital-item{display:flex;justify-content:space-between;padding:0.5rem0;border-bottom:1pxsolid#eee}
+#hospital-distances .hospital-item:last-child{border-bottom:none}
+#hospital-distances .hospital-item span{font-size:15px;color:#2c3e50}
+#hospital-distances .hospital-item span.distance{font-weight:bold;color:#3498db}
+#search-history{position:absolute;z-index:1000;width:100%;top:calc(100% + 0.5rem)}
+#history-list li{padding:8px12px;cursor:pointer}
+#history-list li:hover{background-color:#f1f5f9;font-weight:bold}
+#history-list li::before{content:"⏳";font-size:16px;color:#888;margin-right:8px}
+@media(max-width:640px){#hospital-distances{padding:0.5rem}#hospital-distances .hospital-item span{font-size:14px}}
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-4">
+        <div class="flex flex-col lg:flex-row gap-4">
+            <div class="lg:w-1/2 w-full space-y-4">
+                <div class="relative">
+                    <input type="text" id="address-input" placeholder="Nhập địa chỉ (VD: Cổ Nhuế, Bắc Từ Liêm, Hà Nội)"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Nhập địa chỉ để tìm kiếm">
+                    <button id="clear-input"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-red-500 text-white px-2 py-1 rounded-lg hidden"
+                        title="Xóa nội dung" aria-label="Xóa nội dung tìm kiếm">X</button>
+                    <div id="address-suggestions" class="hidden"></div>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="reset-map" style="margin-top:10px;" aria-label="Đặt lại bản đồ">Đặt lại bản đồ</button>
+                    <button id="open-google-maps" style="margin-top:10px;">Mở trên Google Maps</button>
+                    <select id="hospital-selector" class="p-2 border border-gray-300 rounded-lg"
+                        aria-label="Chọn bệnh viện để xem tuyến đường">
+                        <option value="">Chọn bệnh viện</option>
+                    </select>
+                    <button id="zoom-to-hospital" style="margin-top:10px;" class="hidden"
+                        aria-label="Phóng to bệnh viện">Phóng to bệnh viện</button>
+                </div>
+                <div id="loading" class="text-gray-600 hidden">Đang tải... <span class="spinner"></span></div>
+                <div id="status" class="text-gray-600 hidden"></div>
+                <div id="hospital-distances">
+                    <div class="hospital-item">
+                        <span>Bệnh Viện Đa khoa Phương Đông</span>
+                        <span class="distance">N/A</span>
+                    </div>
+                    <div class="hospital-item">
+                        <span>Bệnh Viện Đa Khoa 5 Sao Hà Nội</span>
+                        <span class="distance">N/A</span>
+                    </div>
+                </div>
+                <div id="search-history"
+                    class="mt-2 bg-white border border-gray-200 rounded-lg shadow-md max-h-40 overflow-y-auto hidden">
+                    <ul id="history-list" class="p-2">
+                    </ul>
+                </div>
+            </div>
+            <div class="lg:w-1/2 w-full">
+                <div id="map" role="region" aria-label="Bản đồ hiển thị vị trí"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script>
+        $(document).ready(function () {
+            const hospitals = [
+                { name: "Bệnh Viện Đa khoa Phương Đông", lat: 21.0709136, lng: 105.7736451, address: "Số 9 P.Viên, Cổ Nhuế, Bắc Từ Liêm, Hà Nội" },
+                { name: "Bệnh Viện Đa Khoa 5 Sao Hà Nội", lat: 21.0408284, lng: 105.7652248, address: "288 Đ.Hồ Tùng Mậu, Cầu Diễn, Bắc Từ Liêm, Hà Nội" }
+            ];
+            const map = L.map('map').setView([21.0709136, 105.7736451], 14);
+            let selectedLocationMarker = null;
+            let routingControl = null;
+            const searchCache = {};
+            let debounceTimeout;
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            const hospitalIcon = L.icon({
+                iconUrl: 'https://img.icons8.com/color/48/000000/hospital.png',
+                iconSize: [38, 38],
+                iconAnchor: [19, 38],
+                popupAnchor: [0, -38]
+            });
+            const userIcon = L.icon({
+                iconUrl: 'https://img.icons8.com/color/48/000000/marker.png',
+                iconSize: [38, 38],
+                iconAnchor: [19, 38],
+                popupAnchor: [0, -38]
+            });
+            hospitals.forEach(hospital => {
+                L.marker([hospital.lat, hospital.lng], { icon: hospitalIcon })
+                    .addTo(map)
+                    .bindPopup(`<b>${hospital.name}</b><br>${hospital.address}`);
+            });
+            hospitals.forEach(hospital => {
+                $('#hospital-selector').append(`<option value="${hospital.name}">${hospital.name}</option>`);
+            });
+            function showStatus(message) {
+                const now = new Date();
+                const timestamp = now.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour12: false, hour: '2-digit', minute: '2-digit' });
+                $("#status").html(`${message} <span class="text-sm text-gray-500">(Cập nhật: ${timestamp})</span>`).show();
+            }
+            async function updateHospitalDistances(startLocation) {
+                let hospitalData = hospitals.map(hospital => ({ ...hospital, distance: startLocation ? "Đang tính..." : "N/A" }));
+
+                if (startLocation) {
+                    hospitalData = await Promise.all(hospitals.map(async hospital => {
+                        try {
+                            const route = await new Promise((resolve, reject) => {
+                                const tempRouting = L.Routing.control({
+                                    waypoints: [L.latLng(startLocation.lat || startLocation[0], startLocation.lng || startLocation[1]), L.latLng(hospital.lat, hospital.lng)],
+                                    router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' }),
+                                    createMarker: () => null,
+                                    addWaypoints: false,
+                                    routeWhileDragging: false,
+                                    show: false
+                                }).on('routesfound', e => {
+                                    resolve(e.routes[0]);
+                                    map.removeControl(tempRouting);
+                                }).on('routingerror', () => {
+                                    reject(new Error("N/A"));
+                                    map.removeControl(tempRouting);
+                                }).addTo(map);
+                            });
+                            const distance = (route.summary.totalDistance / 1000).toFixed(2);
+                            return { ...hospital, distance: `${distance} km` };
+                        } catch {
+                            return { ...hospital, distance: "N/A" };
+                        }
+                    }));
+                }
+                hospitalData.forEach(hospital => {
+                    $(`#hospital-distances .hospital-item:contains('${hospital.name}') .distance`).text(hospital.distance);
+                });
+            }
+            $("#address-input").on("input", function () {
+                const query = $(this).val().trim();
+                $("#clear-input").toggle(query.length > 0);
+                if (query.length < 3) return $("#address-suggestions").hide();
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    $("#loading").show();
+                    if (searchCache[query]) {
+                        displaySuggestions(searchCache[query]);
+                        $("#loading").hide();
+                        return;
+                    }
+                    $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=vn&addressdetails=1&accept-language=vi&limit=10&extratags=1&namedetails=1&dedupe=1`, data => {
+                        searchCache[query] = data;
+                        displaySuggestions(data);
+                        $("#loading").hide();
+                    }).fail(() => {
+                        $("#address-suggestions").empty().show().append("<div class='p-3 text-red-600'>Lỗi khi tìm kiếm. Vui lòng thử lại.</div>");
+                        $("#loading").hide();
+                    });
+                }, 300);
+            });
+            function displaySuggestions(data) {
+                const suggestions = $("#address-suggestions").empty().show();
+                if (!data.length) {
+                    suggestions.append("<div class='p-3 text-gray-600'>Không tìm thấy địa chỉ. Vui lòng nhập chi tiết hơn.</div>");
+                    return;
+                }
+                data.forEach(item => {
+                    const address = item.address || {};
+                    const displayName = [
+                        address.school || item.namedetails?.name || '',
+                        address.house_number ? `Số ${address.house_number}` : '',
+                        address.neighbourhood || address.hamlet || '',
+                        address.road || '',
+                        address.suburb || address.village || '',
+                        address.city_district || address.district || '',
+                        address.city || address.town || address.county || '',
+                        address.state || 'Việt Nam'
+                    ].filter(Boolean).join(', ').trim() || item.display_name || 'Địa chỉ không xác định';
+                    const suggestionItem = $(`<div class="p-3 hover:bg-gray-100 cursor-pointer text-gray-800">${displayName}</div>`);
+                    suggestionItem.on('click keypress', e => {
+                        if (e.type === 'click' || e.key === 'Enter') {
+                            const selectedLocation = [parseFloat(item.lat), parseFloat(item.lon)];
+                            if (selectedLocationMarker) map.removeLayer(selectedLocationMarker);
+                            selectedLocationMarker = L.marker(selectedLocation, { icon: userIcon })
+                                .addTo(map)
+                                .bindPopup(displayName)
+                                .openPopup();
+                            map.setView(selectedLocation, 14);
+                            $("#address-suggestions").hide();
+                            $("#address-input").val(displayName);
+                            $("#hospital-selector").val("");
+                            if (routingControl) {
+                                map.removeControl(routingControl);
+                                routingControl = null;
+                            }
+                            $("#open-google-maps-route").remove();
+                            $("#zoom-to-hospital").addClass("hidden");
+                            showStatus("Đã chọn địa chỉ, vui lòng chọn bệnh viện để xem tuyến đường.");
+                            updateHospitalDistances(selectedLocation);
+                        }
+                    });
+                    suggestions.append(suggestionItem);
+                });
+            }
+            $("#clear-input").click(() => {
+                $("#address-input").val('').focus();
+                $("#address-suggestions").hide();
+                $("#clear-input").hide();
+                if (selectedLocationMarker) {
+                    map.removeLayer(selectedLocationMarker);
+                    selectedLocationMarker = null;
+                }
+                if (routingControl) {
+                    map.removeControl(routingControl);
+                    routingControl = null;
+                }
+                $("#hospital-selector").val("");
+                $("#open-google-maps-route").remove();
+                $("#zoom-to-hospital").addClass("hidden");
+                $("#status").hide();
+                updateHospitalDistances(null);
+            });
+            $(document).on('click', e => {
+                if (!$(e.target).closest("#address-input, #address-suggestions").length) {
+                    $("#address-suggestions").hide();
+                }
+            });
+            $("#hospital-selector").change(async function () {
+                const hospitalName = $(this).val();
+                if (!hospitalName || !selectedLocationMarker) {
+                    if (routingControl) {
+                        map.removeControl(routingControl);
+                        routingControl = null;
+                    }
+                    $("#open-google-maps-route").remove();
+                    $("#zoom-to-hospital").addClass("hidden");
+                    return;
+                }
+
+                const hospital = hospitals.find(h => h.name === hospitalName);
+                if (!hospital) return;
+
+                if (routingControl) {
+                    map.removeControl(routingControl);
+                    routingControl = null;
+                }
+                $("#open-google-maps-route").remove();
+                $("#zoom-to-hospital").removeClass("hidden");
+
+                try {
+                    $("#loading").show();
+                    const route = await new Promise((resolve, reject) => {
+                        routingControl = L.Routing.control({
+                            waypoints: [selectedLocationMarker.getLatLng(), L.latLng(hospital.lat, hospital.lng)],
+                            router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' }),
+                            lineOptions: { styles: [{ color: '#3498db', weight: 5, opacity: 0.8 }] },
+                            createMarker: () => null,
+                            addWaypoints: false,
+                            routeWhileDragging: false,
+                            show: false
+                        }).on('routesfound', e => {
+                            resolve(e.routes[0]);
+                        }).on('routingerror', () => {
+                            reject(new Error(`Không thể tải tuyến đường đến ${hospital.name}.`));
+                        }).addTo(map);
+                    });
+
+                    const distance = (route.summary.totalDistance / 1000).toFixed(2);
+                    const time = Math.round(route.summary.totalTime / 60);
+                    showStatus(`Tuyến đường đến ${hospital.name}: ${distance} km, thời gian ước tính: ${time} phút`);
+                    const googleMapsRouteButton = $('<button id="open-google-maps-route" style="margin-top:10px;" class="flex-1 min-w-[130px] text-sm p-2 border border-gray-300 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors" aria-label="Mở tuyến đường trên Google Maps">Mở tuyến đường trên Google Maps</button>');
+                    $("#hospital-selector").after(googleMapsRouteButton);
+                    googleMapsRouteButton.click(() => {
+                        const startPos = selectedLocationMarker.getLatLng();
+                        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${startPos.lat},${startPos.lng}&destination=${hospital.lat},${hospital.lng}&travelmode=driving`;
+                        window.open(googleMapsUrl, '_blank');
+                    });
+
+                    map.setView([hospital.lat, hospital.lng], 14);
+                    if ('speechSynthesis' in window) {
+                        const speech = new SpeechSynthesisUtterance(`Bạn đã chọn ${hospital.name}. Địa chỉ: ${hospital.address}. Khoảng cách ${distance} km, thời gian ước tính ${time} phút.`);
+                        speech.lang = "vi-VN";
+                        window.speechSynthesis.speak(speech);
+                    }
+                } catch (error) {
+                    showStatus(error.message);
+                } finally {
+                    $("#loading").hide();
+                }
+            });
+            $("#zoom-to-hospital").click(() => {
+                const hospitalName = $("#hospital-selector").val();
+                if (!hospitalName || !selectedLocationMarker) return;
+                const hospital = hospitals.find(h => h.name === hospitalName);
+                if (hospital) {
+                    map.setView([hospital.lat, hospital.lng], 14);
+                    showStatus(`Đã phóng to ${hospital.name}.`);
+                }
+            });
+            $("#reset-map").click(() => {
+                map.setView([21.0709136, 105.7736451], 14);
+                if (selectedLocationMarker) {
+                    map.removeLayer(selectedLocationMarker);
+                    selectedLocationMarker = null;
+                }
+                if (routingControl) {
+                    map.removeControl(routingControl);
+                    routingControl = null;
+                }
+                $("#hospital-selector").val("");
+                $("#address-input").val('');
+                $("#clear-input").hide();
+                $("#address-suggestions").hide();
+                $("#status").hide();
+                $("#open-google-maps-route").remove();
+                $("#zoom-to-hospital").addClass("hidden");
+                updateHospitalDistances(null);
+            });
+            $("#open-google-maps").click(() => {
+                if (!selectedLocationMarker) return alert("Vui lòng chọn một địa điểm.");
+                const pos = selectedLocationMarker.getLatLng();
+                window.open(`https://www.google.com/maps/search/?api=1&query=${pos.lat},${pos.lng}`, '_blank');
+            });
+            $("#loading").hide();
+            $("#status").hide();
+            updateHospitalDistances(null);
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            function updateHistory(address) {
+                history = history.filter(h => h !== address);
+                history.unshift(address);
+                if (history.length > 10) history.pop();
+                localStorage.setItem('searchHistory', JSON.stringify(history));
+                renderHistory();
+            }
+
+            function renderHistory() {
+                const historyList = $('#history-list').empty();
+                if (history.length === 0) {
+                    historyList.append('<li class="p-2 text-gray-600">Không có lịch sử.</li>');
+                    $('#search-history').hide();
+                    return;
+                }
+                history.forEach(item => {
+                    const li = $('<li class="hover:bg-gray-100 cursor-pointer text-gray-800"></li>').text(item);
+                    li.on('click keypress', e => {
+                        if (e.type === 'click' || e.key === 'Enter') {
+                            $("#address-input").val(item);
+                            $("#address-suggestions").hide();
+                            const cachedData = searchCache[item];
+                            if (cachedData) {
+                                displaySuggestions(cachedData);
+                            } else {
+                                $.getJSON(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(item)}&countrycodes=vn&addressdetails=1&accept-language=vi&limit=10&extratags=1&namedetails=1&dedupe=1`, data => {
+                                    searchCache[item] = data;
+                                    displaySuggestions(data);
+                                });
+                            }
+                            $('#search-history').hide();
+                        }
+                    });
+                    historyList.append(li);
+                });
+                $('#search-history').show();
+            }
+            $(document).on('click keypress', '#address-suggestions div', function () {
+                const address = $(this).text();
+                updateHistory(address);
+            });
+            $("#address-input").on("focus", function () {
+                renderHistory();
+            });
+            $(document).on('click', e => {
+                if (!$(e.target).closest("#address-input, #address-suggestions, #search-history").length) {
+                    $('#search-history').hide();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
